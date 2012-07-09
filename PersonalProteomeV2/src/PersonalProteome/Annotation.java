@@ -86,15 +86,17 @@ public class Annotation{
 	private String endTime = "";
 
 	private boolean uploadAll = false;
+	
 	/**
 	 * Use this when the populateGTFList method is desired to be used.  It will allow a GTF file to be read in using the Personal Proteome method.
 	 */
 	public Annotation(boolean hasMito, boolean proteinOnly){
 		genomeHasMito = hasMito;
 		this.uploadAll = !proteinOnly;
-	}
+	}//Annotation
+	
 	/**
-	 * For use with Proteome Lite, this simply allows for a single proteome to be created.
+	 * For use with Proteome Lite, this simply allows for a single proteome to be created without any associated statistics.
 	 * @param annotationFile
 	 * @param genomeDirectory
 	 * @param chrmDirectory
@@ -107,12 +109,12 @@ public class Annotation{
 		
 		File mitoFile = new File(chrmDirectory + "chrM.fa");
 		genomeHasMito = mitoFile.exists();
-	}
+	}//Annotation
+	
 	/**
 	 * Annotation loads in a location for an annotation and a directory of chromosomes, and a regions of interest file.  It then uploads the annotation file and creates a list of transcripts
 	 * to produce proteins from.  These transcripts are stored, compared, put into an output file and have data/statistics run on them.  The synthesis method has several parameters that
 	 * can be set to affect how to  and performs protein synthesis.
-	 * 
 	 */
 	public Annotation(String annotationFile, String refchrmDirectory,String chrmDirectory, String proteinFASTAOutputDir, String regionsOfInterest, String outputFileName, String statsOutputFile, String dataPointsFileName){
 		this.proteinFASTAOUTPUTDIR = proteinFASTAOutputDir;
@@ -127,7 +129,8 @@ public class Annotation{
 		File mitoFile = new File(chrmDirectory + "chrM.fa");
 		genomeHasMito = mitoFile.exists();
 		
-	}
+	}//Annotation
+	
 	/**
 	 * Proteome Lite simply creates a proteome, with no extra information or comparisons done.
 	 * @param debug
@@ -196,7 +199,8 @@ public class Annotation{
 		U.p("Finishing up: " + endTime);
 		
 		
-	}
+	}//proteomeLite
+	
 	/**
 	 * Synthesis uses information about files passed in through the constructor to synthesize proteins.
 	 * Synthesis adds one protein into the output folder for each transcript with a start and coding regions passed in the annotation file.
@@ -206,7 +210,7 @@ public class Annotation{
 		//Call synthesize with the default value for modStopStart
 		synthesize(displayInfo, modStopStart, preFilterStarts);
 
-	}
+	}//synthesize
 	
 	/**
 	 * Synthesis uses information about files passed in through the constructor to synthesize proteins.
@@ -218,7 +222,8 @@ public class Annotation{
 		//Call synthesize with the default value for modStopStart
 		synthesize(debug, modStopStart, preFilterStarts);
 
-	}
+	}//synthesize
+	
 	/**
 	 * Synthesis uses information about files passed in through the constructor to synthesize proteins.
 	 * Synthesis adds one protein into the output folder for each transcript with a start and coding regions passed in the annotation file.
@@ -321,7 +326,8 @@ public class Annotation{
 		U.p("Finishing up: " + endTime);
 		
 
-	}
+	}//synthesize
+	
 	/**
 	 * parseGTFFile takes a GTF format annotation file and populates an ArrayList, (GTFlist), of GENCODE_GTF_Line objects representing each line of the file.
 	 * @param The path to the Annotation file.
@@ -970,11 +976,7 @@ public class Annotation{
 					
 					t.findCDSSplitLocations();
 					
-					ArrayList<Double> exonSplits = t.getExonSplitLocations();
-					
-					/**
-					 *  Get 
-					 */
+
 					for(int q = 0; q < t.getvariantCount(); q++){
 						//Get the initial variant 
 						
@@ -1708,6 +1710,10 @@ public class Annotation{
 
 	
 	}//createOutputFiles
+	
+	/**
+	 * createLiteOutput simply creates a single .fa file with just the input genomes proteome.
+	 */
 	private void createLiteOutput(){
 		//Writing to HDD related variables
 		BufferedWriter out;
@@ -1755,7 +1761,8 @@ public class Annotation{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}//createLiteOutput
+	
 	/**
 	 * removeModChar cleans up proteins with the modification delimiting marks found in 'Definitions'.
 	 * It cleaves for premature stops, removes extended end characters, and padding for a delayed start.
@@ -1799,7 +1806,8 @@ public class Annotation{
 		}
 		
 		return modProtein;
-	}
+	}//removeModChar
+	
 	/**
 	 * Populates the chromosome array with the file locations of each chromosome.'
 	 * @param chrmDir The directory containing the chromosome files.
@@ -1811,7 +1819,7 @@ public class Annotation{
 		chrmFile[22] = chrmDir + "chrM.fa";
 		chrmFile[23] = chrmDir + "chrX.fa";
 		chrmFile[24] = chrmDir + "chrY.fa";
-	}
+	}//populateChrmArray
 	
 	
 	/**
@@ -1820,13 +1828,13 @@ public class Annotation{
 	 */
 	public ArrayList<GENCODE_GTF_Line> getAnnotaitonLines(){
 		return GTFlist;
-	}
+	}//getAnnotationLines
 	/**
 	 * 
 	 * @return the lines of the annotation file.
 	 */
 	public ArrayList<Transcript> getTranscripts(){
 		return transcriptList;
-	}
+	}//getTranscripts
 	
-}
+}//Annotation

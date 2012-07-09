@@ -10,8 +10,18 @@ import java.io.IOException;
 import PersonalProteome.U;
 
 
+/**
+ * Properties is a class that uploads and stores data about runtime parameters for personal proteome.  It loads its properties dynamically from a File using
+ * the loadProperties method.  The entire class contains static methods and values and should not be instantiated.
+ * @author David "Corvette" Thomas, modeled after code from Brian Risk
+ *
+ */
 public class Properties {
 
+	
+	//Null private constructor so this class can't be instantiated
+	private BGIProperties(){
+	}
 	
 	//File/Directory Locations
 	public static String annotationFile = "No annotation file set!";
@@ -25,24 +35,26 @@ public class Properties {
 	public static String variatnDataFileName = "VariantData.txt";
 	
 	//Runtime parameters
+	//These values are all set to default to false
 	public static boolean debug = false;
 	public static boolean useModifiedStopsAndStarts = false;
 	public static boolean preFilterOutTranWithoutStartCodon = false;
-	
 	public static boolean proteomeLite = false;
 	
 	/**
-	 * 
+	 * loadProperties parses a input file and uploads all data it can from the file.
 	 * @param fileName the name of our properties file
 	 */
 	public static void loadProperties(File propertiesFile) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(propertiesFile));
 			String line = br.readLine();
+			
 			while (line != null) {
 				setPropertyFromString(line);
 				line = br.readLine();
-			}
+			}//while
+			
 			br.close();
 		} catch (FileNotFoundException e) {
 			U.p("Could not find the properties file: " + propertiesFile.getName());
@@ -50,10 +62,15 @@ public class Properties {
 		} catch (IOException e) {
 			U.p("Could not read the properties file: " + propertiesFile.getName());
 			e.printStackTrace();
-		}
+		}//catch
 		
-	}
+	}//loadProperties
 	
+	
+	/**
+	 * setPropertiyFromString is a helper method that populates the various properties in this file based on lines read
+	 * from the input file.  It is called repeatedly from the loadProperties method.
+	 */
 	private static void setPropertyFromString(String line) {
 		line = line.trim();
 		
@@ -67,7 +84,7 @@ public class Properties {
 		/* ignore lines that do not have a space in them */
 		if (line.indexOf(" ") == -1) return;
 		
-		/* getting the property name and the propert value */
+		/* getting the property name and the property value */
 		String propertyName = line.substring(0, line.indexOf(" "));
 		String propertyValue = line.substring(line.indexOf(" ") + 1, line.length());
 		
@@ -101,5 +118,5 @@ public class Properties {
 		if (propertyName.equals("proteomeLite"))
 			proteomeLite = Boolean.valueOf(propertyValue.trim());
 		
-	}
-}
+	}//setPropertyFromString
+}//Properties

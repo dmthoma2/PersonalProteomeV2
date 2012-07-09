@@ -22,9 +22,6 @@ public class PeptideLocationLine implements Comparable<PeptideLocationLine> {
 	private int transID = -1;
 	private int startID = -1;
 	private int stopID = -1;
-//	private String score3 = "";
-//	private String score4 = "";
-//	private String score5 = "";
 	
 	//Variables to store information about this peptides location.
 	private int startLocType = Definitions.LOCATION_TYPE_UNKNOWN;
@@ -283,7 +280,7 @@ public class PeptideLocationLine implements Comparable<PeptideLocationLine> {
 		
 		
 		return out;
-	}
+	}//convertLocTypeToString
 	
 	
-}
+}//PeptideLocationLine

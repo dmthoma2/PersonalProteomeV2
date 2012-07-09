@@ -8,6 +8,13 @@ import java.io.IOException;
 
 import PersonalProteome.U;
 
+
+/**
+ * Properties is a class that uploads and stores data about runtime parameters for BedGeneIdentification.  It loads its properties dynamically from a File using
+ * the loadProperties method.  The entire class contains static methods and values and should not be instantiated.
+ * @author David "Corvette" Thomas, modeled after code from Brian Risk
+ *
+ */
 public class BGIProperties {
 
 	
@@ -16,9 +23,13 @@ public class BGIProperties {
 	public static String outputDir;
 	public static String peptideListFile;
 	
+	
+	//Null private constructor so this class can't be instantiated
+	private BGIProperties(){
+	}
 
 	/**
-	 * loadProperties Loads in the properties from the propertiesfile and stores them in variables in the AnalysisProperties class.
+	 * loadProperties Loads in the properties from the properties file and stores them in variables in the AnalysisProperties class.
 	 * @param fileName the name of our properties file
 	 */
 	public static void loadProperties(File propertiesFile) {
@@ -38,7 +49,8 @@ public class BGIProperties {
 			e.printStackTrace();
 		}
 		
-	}
+	}//loadProperties
+	
 	/**
 	 * Each from the properties file is brought in and put in its variable.
 	 * @param line A line from the properties file.
@@ -69,4 +81,5 @@ public class BGIProperties {
 			peptideListFile = propertyValue.trim();
 
 	}//if
+	
 }//BGIProperties

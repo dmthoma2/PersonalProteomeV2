@@ -1,6 +1,5 @@
 package DiploidCarryOvertool.chain;
 
-import PersonalProteome.U;
 
 /**
  * A single .chain format file line. Information can be found at UCSC: http://genome.ucsc.edu/goldenPath/help/chain.html

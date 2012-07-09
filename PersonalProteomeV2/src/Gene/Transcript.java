@@ -6,12 +6,15 @@ import java.util.Collections;
 
 
 import PersonalProteome.Definitions;
-import PersonalProteome.U;
 
 
 /**
- * Transcript represents a single transcript from an annotation file.  It contains all of the information to create a single protein.
- *   It extends GeneticObject.  <GeneticObject>
+ *  Transcript represents a single transcript from an annotation file.  It contains all of the information to create a single protein.
+ *  It extends GeneticObject.  <GeneticObject>
+ *   
+ *  Transcript contains information used by several different programs and has become very large.  Its methods are organized based on how
+ *  similar the results/actions they provide.
+ *   
  * @author David "Corvette" Thomas
  *
  */
@@ -62,6 +65,7 @@ public class Transcript extends GeneticObject {
 	
 	private boolean hasStartCodon = true;
 	private boolean hasStopCodon = true;
+	
 	/**
 	 * Transcript represents a single transcript from an annotation file.  It contains all of the information to create a single protein.
 	 * @param chromosme  This is the chromosome that this transcript is on.  It is based on the chromosome list in 'Definitions.
@@ -77,7 +81,7 @@ public class Transcript extends GeneticObject {
 		
 		//Set chromosome and determine if it is mitochondrion DNA
 		this.chromosome = chromosome;
-		if(chromosome == Definitions.chromosomeM){
+		if(this.chromosome == Definitions.chromosomeM){
 			isMito = true;
 		}else{
 			isMito = false;
@@ -96,19 +100,19 @@ public class Transcript extends GeneticObject {
 		
 
 
-	}
+	}//Transcript
 	
 	/**
 	 * Returns a string of this transcripts iD, start, and stop.
 	 */
 	public String toString(){
 		return iD + super.toString();
-	}
+	}//toString
 
 	
 	/**
 	 * createProtein Takes the information within this transcript and creates a protein.  It handles the modified starts and stops,
-	 * it sorts CDS regions, finds CDS split locations, and clears out memory once finished.
+	 * it sorts CDS regions, finds CDS split locations, and clears out memory once finished by calling the saveMemory function.
 	 */
 	public void createProtein(){
 		
@@ -415,7 +419,7 @@ public class Transcript extends GeneticObject {
 			} else {
 				mod++;
 			}
-		}
+		}//for
 		
 		this.protein = buildingProtein.toString();
 
@@ -424,86 +428,14 @@ public class Transcript extends GeneticObject {
 		saveMemory();
 	}//createProtein
 	
-	
-	/**
-	 * findCDSSplitLocations determines at what indices of a protein there is a CDS split. Assumes the CDS list is sorted.
-	 */
-	public void findCDSSplitLocations(){
-		//There are no split locations if there is only one/zero CDS
-		if(CDS.size() < 2){
-			return;
-		}
-
-		//Forward strand
-		//The CDS are in nucleic acid lengths, but the code needs the lengths in amino acids, so each length must be divided by 3.
-		
-		//Get the first CDS split location
-		exonSplitLocations.add(((double)(CDS.get(0).getLength()) + 1) / 3);
-		
-		//Add in two-last cds split locations.
-		for(int i = 1; i < CDS.size() - 1; i++){
-			exonSplitLocations.add((((double)(CDS.get(i).getLength()) + 1) / 3) + exonSplitLocations.get(i - 1));
-			
-		}
-
-	
-		if(strand == Definitions.genomicStrandNEGATIVE){
-
-			//The reverse strand calculates the split locations backwards because the protein is formed backwards.
-			double finalLocation = ((double)CDS.get(CDS.size() - 1).getLength() + 1)/3 + exonSplitLocations.get(CDS.size() - 1 - 1);
-			
-			//Reverse the values based on the length
-			//Work backwards to populate the split temp list
-			ArrayList<Double> temp = new ArrayList<Double>();
-			for(Double val: exonSplitLocations){
-				temp.add(finalLocation - val);
-			}
-
-			exonSplitLocations = temp;
-
-			//Reverse the split locations so they are ascending relative to the start of the protein.
-			Collections.sort(exonSplitLocations);
-		}//Reverse
-
-	
-		
-		//Error check to ensure each location has the exact value that it needs.  Rounding with doubles can be funny.
-		ArrayList<Double> tempAdjust = new ArrayList<Double>();
-		for(int i = 0; i < exonSplitLocations.size() ; i++){
-			
-			 //Deal with truncated numbers becuase comp does not recognize 69.999999999999 = 70
-			double val = exonSplitLocations.get(i).doubleValue();
-			 int floor = (int)val;
-			 int ceiling = floor + 1;
-		     double  minValue = floor + .9;
-		 
-		     if(val < ceiling && val >= minValue ){
-		    	 val = ceiling;
-		     }else{
-		    	 if(val < (int)val + .1){
-		    		 val = (int)val;
-		    	 }
-		     }
-			tempAdjust.add(val);
-		}
-		
-		exonSplitLocations = tempAdjust;
-		exonSplitLocations.trimToSize();
-	}//findCDSSplitLocations
-
-
-
-
-
+	/*Begin Specialized internal methods - these methods are special methdos used within Transcript for carrying out various specialized tasks*/
 	/**
 	 * Save memory clears the sequence, which occupies the majority of memory within this transcript object.  JAVA GC will take care of the memory.
 	 */
 	private void saveMemory(){
 		transcriptSequence = null;
-	}
-
-
-
+	}//saveMemory
+	
 	/**
 	 * Method used to lookup a codons corresponding amino acid based on its nucleic sequence.
 	 * @author Brian Risk
@@ -519,7 +451,7 @@ public class Transcript extends GeneticObject {
 		} else {
 			return 63 - indexForCodonArray(codon);
 		}
-	}
+	}//indexForCodonArray
 	
 	/**
 	 * Method used to lookup a codons corresponding amino acid, but assumes the direction is forwards.
@@ -699,9 +631,13 @@ public class Transcript extends GeneticObject {
 		} else {
 			return -1; //return STOP
 		}
-	}
+	}//indexForCodonArray
+
+	/*End specialized internal methods*/
+
 	
 	
+	/*Begin Add methods*/
 	/**
 	 * addSeleno adds a Selenocysteine to this transcripts Seleno list.  This method also modifies the transcripts sequence to mark it with the selenocysteines location.
 	 *  This method does not sort the Selenocysteines.
@@ -732,52 +668,19 @@ public class Transcript extends GeneticObject {
 		
 		//Add this seleno to the seleno objects list for use later in statistics
 		Seleno.add(s);
-	}
-	
+	}//addSeleno
+
 	/**
-	 * isAStop determines if a 3 character string is a DNA stop codon.  Returns true if it is, false otherwise.  Considers mitochondrion DNA
+	 * addCDS adds a CDS to this transcripts CDS list.  This method does not sort the CDS.
 	 */
-	public boolean isAStop(String codon, int strand){
-		
-		if(!isMito){
-			String stop1 = "TGA";
-			String stop2 = "TAG";
-			String stop3 = "TAA";
-		
-			if(strand == Definitions.genomicStrandNEGATIVE){
-				stop1 = "TCA";
-				stop2 = "CTA";
-				stop3 = "TTA";
-			}
-				
-			if(codon.equals(stop1) || codon.equals(stop2) || codon.equals(stop3)){
-				return true;
-			}
-			
-			
-			return false;
-		}else{
-			String stop1 = "AGA";
-			String stop2 = "TAG";
-			String stop3 = "TAA";
-			String stop4 = "AGG";
-			
-			if(strand == Definitions.genomicStrandNEGATIVE){
-				stop1 = "TCT";
-				stop2 = "CTA";
-				stop3 = "TTA";
-				stop4 = "CCT";
-			}
-				
-			if(codon.equals(stop1) || codon.equals(stop2) || codon.equals(stop3) || codon.equals(stop4)){
-				return true;
-			}
-			
-			
-			return false;
-			
-		}
-	}
+	public void addCDS(CDS c){
+		//Add it to the end of the list if its place has not been found
+		CDS.add(c);
+	}//addCDS
+	
+	/*End add methods*/
+	
+	/*Begin return specialized values methods - These methods are return specialized/modified values of some sort.*/
 	
 	/**
 	 * getProteinWithSpliceMarkers returns this transcripts protein with special markers inserted at the splice junction locations of this protein.
@@ -792,12 +695,82 @@ public class Transcript extends GeneticObject {
 		
 		
 		return workBench.toString();
-	}
+	}//getProteinWithSpliceMarkers
 	
+	/**
+	 * findCDSSplitLocations determines at what indices of a protein there is a CDS split. Assumes the CDS list is sorted.
+	 */
+	public void findCDSSplitLocations(){
+		//There are no split locations if there is only one/zero CDS
+		if(CDS.size() < 2){
+			return;
+		}
+
+		//Forward strand
+		//The CDS are in nucleic acid lengths, but the code needs the lengths in amino acids, so each length must be divided by 3.
+		
+		//Get the first CDS split location
+		exonSplitLocations.add(((double)(CDS.get(0).getLength()) + 1) / 3);
+		
+		//Add in two-last cds split locations.
+		for(int i = 1; i < CDS.size() - 1; i++){
+			exonSplitLocations.add((((double)(CDS.get(i).getLength()) + 1) / 3) + exonSplitLocations.get(i - 1));
+			
+		}
+
+	
+		if(strand == Definitions.genomicStrandNEGATIVE){
+
+			//The reverse strand calculates the split locations backwards because the protein is formed backwards.
+			double finalLocation = ((double)CDS.get(CDS.size() - 1).getLength() + 1)/3 + exonSplitLocations.get(CDS.size() - 1 - 1);
+			
+			//Reverse the values based on the length
+			//Work backwards to populate the split temp list
+			ArrayList<Double> temp = new ArrayList<Double>();
+			for(Double val: exonSplitLocations){
+				temp.add(finalLocation - val);
+			}
+
+			exonSplitLocations = temp;
+
+			//Reverse the split locations so they are ascending relative to the start of the protein.
+			Collections.sort(exonSplitLocations);
+		}//Reverse
+
+	
+		
+		//Error check to ensure each location has the exact value that it needs.  Rounding with doubles can be funny.
+		ArrayList<Double> tempAdjust = new ArrayList<Double>();
+		for(int i = 0; i < exonSplitLocations.size() ; i++){
+			
+			 //Deal with truncated numbers becuase comp does not recognize 69.999999999999 = 70
+			double val = exonSplitLocations.get(i).doubleValue();
+			 int floor = (int)val;
+			 int ceiling = floor + 1;
+		     double  minValue = floor + .9;
+		 
+		     if(val < ceiling && val >= minValue ){
+		    	 val = ceiling;
+		     }else{
+		    	 if(val < (int)val + .1){
+		    		 val = (int)val;
+		    	 }
+		     }
+			tempAdjust.add(val);
+		}
+		
+		exonSplitLocations = tempAdjust;
+		exonSplitLocations.trimToSize();
+	}//findCDSSplitLocations
+
+	
+	/*End specialized values*/
+	
+	/*Begin Validation Methods - These methods determine whether a specified value is or isnot something*/
 	/**
 	 * isAStart determines if a 3 character string is a DNA start codon.  Returns true if it is a 3 character match, false otherwise.  Considers mitochondrion DNA
 	 */
-	public boolean isAStart(String codon, int strand){
+	private boolean isAStart(String codon, int strand){
 		
 		//Normal Genetic Code
 		if(!isMito){
@@ -839,16 +812,59 @@ public class Transcript extends GeneticObject {
 			
 		}
 			
-	}
+	}//isAStart
+	
 	
 	/**
-	 * addCDS adds a CDS to this transcripts CDS list.  This method does not sort the CDS.
+	 *@return isAStop determines if a 3 character string is a DNA stop codon.  Returns true if it is, false otherwise.  Considers mitochondrion DNA
 	 */
-	public void addCDS(CDS c){
-		//Add it to the end of the list if its place has not been found
-		CDS.add(c);
-	}
+	private boolean isAStop(String codon, int strand){
+		
+		if(!isMito){
+			String stop1 = "TGA";
+			String stop2 = "TAG";
+			String stop3 = "TAA";
+		
+			if(strand == Definitions.genomicStrandNEGATIVE){
+				stop1 = "TCA";
+				stop2 = "CTA";
+				stop3 = "TTA";
+			}
+				
+			if(codon.equals(stop1) || codon.equals(stop2) || codon.equals(stop3)){
+				return true;
+			}
+			
+			
+			return false;
+		}else{
+			String stop1 = "AGA";
+			String stop2 = "TAG";
+			String stop3 = "TAA";
+			String stop4 = "AGG";
+			
+			if(strand == Definitions.genomicStrandNEGATIVE){
+				stop1 = "TCT";
+				stop2 = "CTA";
+				stop3 = "TTA";
+				stop4 = "CCT";
+			}
+				
+			if(codon.equals(stop1) || codon.equals(stop2) || codon.equals(stop3) || codon.equals(stop4)){
+				return true;
+			}
+			
+			
+			return false;
+			
+		}
+	}//isAStop
 	
+	/*End Validation Methods*/
+	
+
+	
+	/*Begin getters and setters*/
 	/**
 	 * @return iD is the index of this objects GENCODE_GTF_Line in the GTFlist.  Use the id to reference into the GTFlist to get all of the associated information for this transcript.
 	 */
@@ -889,8 +905,6 @@ public class Transcript extends GeneticObject {
 	public String gettranscriptSequence() {
 		return transcriptSequence;
 	}
-
-
 
 	/**
 	 * @return An arraylist of CDS objects for this transcript.
@@ -996,4 +1010,6 @@ public class Transcript extends GeneticObject {
 	public void setHasStopCodon(boolean hasStopCodon) {
 		this.hasStopCodon = hasStopCodon;
 	}
-}
+	
+	/*End getters and setters*/
+}//Transcript

@@ -79,4 +79,4 @@ public class GeneticObject implements Comparable<GeneticObject>{
 		return 0;
 	}
 
-}
+}//geneticObject

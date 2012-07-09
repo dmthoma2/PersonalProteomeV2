@@ -18,6 +18,7 @@ import PersonalProteome.BEDGeneIdentifier.SubClasses.BedFileLine;
 import PersonalProteome.BEDGeneIdentifier.SubClasses.PeptideLocationLine;
 /**
  * 
+ * 
  * BEDGeneIdentification takes in a full bed file and outputs an appended bed file with additional information about the location of the DNA sequence represented by the bed file.  
  * Additional information includes: General Location (Exon, Intron, UTR, etc), a locations priority based on the number of transcripts it occurs in (Y if it is the best score, N otherwise.  See Score section for more information).
  * LocationSpecific information which details which exon/intron a line occurs in or whether transcript lines are 5PrimeUTR or 3PrimeUTR.  General information about gene/transcripts a line occurs in are included
@@ -46,6 +47,7 @@ import PersonalProteome.BEDGeneIdentifier.SubClasses.PeptideLocationLine;
  * INTERGENIC		TRANSCRIPT	0 + 1 = 1
  * 
  * 
+ * ***Bed file must have atleast the first five columns to be used by this class***
  * 
  * @author David "Corvette" Thomas
  *
@@ -59,7 +61,7 @@ public class BEDGeneIdentification{
 
 
 	
-	//Locaton check
+	//Location check
 	private ArrayList<PeptideLocationLine> peptideLocationList  = new ArrayList<PeptideLocationLine>();
 	private ArrayList<ArrayList<PeptideLocationLine>> peptideLocationListTopScores = new ArrayList<ArrayList<PeptideLocationLine>>();
 	private HashMap<String, ArrayList<Integer>> genes = new HashMap<String, ArrayList<Integer>>();
@@ -85,8 +87,8 @@ public class BEDGeneIdentification{
 
 	/**
 	 * BEDGeneIdentification
-	 * @param annotationFile
-	 * @param bedFile
+	 * @param annotationFile Gencode gtf format annotation.
+	 * @param bedFile  Bed file to upload.  Must be atleast a bed 5 file or larger.
 	 * @param outputDir
 	 */
 	public BEDGeneIdentification(String annotationFile,String bedFile, String outputDir){
@@ -148,7 +150,7 @@ public class BEDGeneIdentification{
 	
 
 	/**
-	 * uploadBedFile allows uploads and stores lines for each bed file.
+	 * uploadBedFile allows uploads and stores lines for each bed file.  The input file must have at least the first 5 bed columns.
 	 */
 	private void uploadBedFile(){
 		File peptideFile = new File(bedFile);

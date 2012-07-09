@@ -2,7 +2,8 @@ package AnnotationAlignment;
 
 /**
  * Fuzzy String Algorithms is a class that holds various implementations of fuzzy string matching, and is used with Annotation Alignment
- *  to make a best guess about where a matching string belongs in a sequence.
+ *  to make a best guess about where a matching string belongs in a sequence.  These methods were not written by David Thomas, but they were
+ *  compiled into a signle class by him.  Appropriate credit given in each method summary.
  *  
  * @author David "Corvette" Thomas
  *
@@ -155,4 +156,4 @@ public class fuzzyStringAlgorithms {
 	}
 
 	
-}
+}//fuzzyStringAlgorithms

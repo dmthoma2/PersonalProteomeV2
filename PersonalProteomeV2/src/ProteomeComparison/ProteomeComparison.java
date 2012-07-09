@@ -66,16 +66,16 @@ public class ProteomeComparison {
 		printFarewell();
 		
 		
-	}
+	}//main
 	
 	public static void printGreeting() {		
 		U.p("Proteome Comparison at the speed of a turbo-Vette!");
 		U.p("max available memory: " + (double) memoryUsage.getMax() / (1024 * 1024 * 1024) + " gigabytes");
-	}
+	}//printGreetings
 	
 	public static void printFarewell() {
 		U.p("Until next time, signing off...");
-	}
+	}//printFarewell
 
 	//Time
 	SimpleDateFormat sdf = new SimpleDateFormat(Definitions.DATE_FORMAT);
@@ -115,7 +115,7 @@ public class ProteomeComparison {
 		this.gencodeName = gencodeName;
 		this.PPname = PPName;
 		
-	}
+	}//ProteomeComparison
 	
 	/**
 	 * Compare is the primary method of GENCODEPPComparison.  Once called, this method handles uploading translations, comparing them, and creating output.
@@ -136,8 +136,13 @@ public class ProteomeComparison {
 		
 		U.startStopwatch();
 		U.p("Loading Second Proteome file.");
+		
+		
+		/*This is code to do a (jerry-rigged) PP side by side comparison, instead of validation against the GENCODE translations*/
 		loadPP(new File(this.gencodeFile));
 //		loadGencode();
+		/**/
+		
 		U.stopStopwatch();
 		
 		U.startStopwatch();
@@ -162,13 +167,13 @@ public class ProteomeComparison {
 		//Get the ending time
 
 		U.p("Finishing up: " + endTime);
-	}
+	}//Compare
 	
 	/**
 	 * loadPP uploads and stores the information in the constructor specified Personal Proteome output.
 	 */
 	private void loadPP(File file){
-//		File ppFile = file;
+
 		StringBuffer sequence = new StringBuffer();
 		String transID = "";
 		String geneID = "";
@@ -184,20 +189,19 @@ public class ProteomeComparison {
 					token = s.next();
 				}else{
 					break;
-				}
+				}//else
 				
-//				U.p(1);
+
 				//Skip header information that is not important
 				if(token.contains(">")){
 					if(arrowCount < 2){
 						arrowCount++;
 						s.nextLine();
 						continue;
-					}
+					}//if
 					arrowCount = 0;
-				}
-	
-//				U.p(2);
+				}//if
+
 				token = s.nextLine();
 				token = token.trim();
 				
@@ -209,8 +213,8 @@ public class ProteomeComparison {
 				while(token.length() > 0){
 					sequence.append(token.toUpperCase());
 					token = s.nextLine();
-				}		
-//				U.p(3);
+				}//while	
+
 				ppTransList.add(new Translation(geneID, transID, sequence.toString()));
 				 	
 				sequence = new StringBuffer();
@@ -218,18 +222,18 @@ public class ProteomeComparison {
 				geneID = "";
 				if(i % 1000 == 0){
 					i++;
-				}
+				}//if
 				i++;
-			}
+			}//while
 			
 			U.p("Total number of P.P. Translations read in: " + ppTransList.size());
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
+		}//catch
 		
 		
-	}
+	}//loadPP
 	
 	/**
 	 * loadGencode uploads and stores the proteins from the constructor specified GENCODE translations.
@@ -256,14 +260,15 @@ public class ProteomeComparison {
 				sequence = new StringBuffer();
 				transID = "";
 				geneID = "";
-			}
+			}//while
 			
 			U.p("Total number of gencode Translations read in: " + gencodeTransList.size());
 			
 		}catch (FileNotFoundException e){
 			e.printStackTrace();
-		}
-	}
+		}//catch
+		
+	}//loadGencode
 	
 	/**
 	 * createGencodeHash stores the uploaded GENCODE translations in a hashtable for optimization purposes.  It allows for constant seek time for a GENCODE translation, so when going through
@@ -279,10 +284,10 @@ public class ProteomeComparison {
 			matchTrans = new TranslationMatch();
 			matchTrans.setGencodeTrans(gencodeT);
 			matchHash.put((gencodeT.getTranscriptID() + gencodeT.getGeneID()), matchTrans);
-		}
+		}//for
 		
 		U.p("Number of successfully hashed gencode trasnlations: " + matchHash.size());
-	}
+	}//createGencodeHash
 	
 	/**
 	 * addPPToGencode matches up each GENCODE translation with its accompanying PP translation.
@@ -301,7 +306,7 @@ public class ProteomeComparison {
 	
 				//Add the personal proteome translation to its corresponding GENCODE translation
 				tm.setPpTrans(ppT);
-			}
+			}//if
 			
 			
 			
@@ -311,13 +316,13 @@ public class ProteomeComparison {
 		for(Translation t: ppTransList){
 			if(t.getMatchType() == 1){
 				count++;
-			}
-		}
+			}//if
+		}//for
 		
 		
 		U.p("Number of successfully matched P.P. translations: " + count);
 		U.p("Hash map size " + matchHash.size());
-	}
+	}//addPPToGencode
 	
 	/**
 	 * compareAndCreateOutput compares all matches and calculates statistics about this information.  It then generates about files based on the data.
@@ -338,7 +343,7 @@ public class ProteomeComparison {
 		if(matchesCol.size() == 0){
 			U.p("No Matches");
 			return;
-		}
+		}//if
 		
 		
 		TranslationMatch token;
@@ -354,15 +359,15 @@ public class ProteomeComparison {
 			//Determine the total number of matches
 			if(token.getGencodeTrans().getMatchType() == Definitions.MATCH_TYPE_MATCHED){
 				totalMatchCount++;
-			}
+			}//if
 			
 			//Determine the number of unmatched translations
 			if(token.getGencodeTrans().getMatchType() == Definitions.MATCH_TYPE_UNMATCHED){
 				gencodeNotMatchedCount++;
 				if(gencodeNotMatchedCount < 10){
 					U.p("Unmatched gencode protein: " + token.getGencodeTrans().toString());
-				}
-			}
+				}//if
+			}//if
 
 			
 		}//while
@@ -370,7 +375,7 @@ public class ProteomeComparison {
 		for(Translation t: ppTransList){
 			if(t.getMatchType() == Definitions.MATCH_TYPE_UNMATCHED){
 				ppNotMatchedCount++;
-			}
+			}//if
 		}//for loop
 		
 
@@ -408,14 +413,14 @@ public class ProteomeComparison {
 					//Write 80 characters
 						unMatchedGencode.append(genTran.getSequence().substring(k*lineLength, (k+1)*lineLength));
 						unMatchedGencode.append("\n");
-					}
+					}//else
 					
 				}//for
 
 				unMatchedGencode.append("\n");
 
 				continue;
-			}
+			}//if
 			int shortestTranLength = 0;
 			
 			if(genTran.getSequence().length() > ppTran.getSequence().length()){
@@ -432,7 +437,7 @@ public class ProteomeComparison {
 					//If the comparison is a delayed start ignore it
 					if(ppTran.getSequence().charAt(n) == Definitions.START_NOT_FOUND_CHAR){
 						continue;
-					}
+					}//if
 					ppTran.incrementVariants();
 					String charToLower = ppTran.getSequence().substring(n, n + 1);
 					charToLower = charToLower.toLowerCase();
@@ -447,16 +452,16 @@ public class ProteomeComparison {
 			//Ignore proteins where the variantCount and length are the same
 			if(ppTran.getSequence().length() == genTran.getSequence().length() && ppTran.getVariants() == genTran.getVariants()){
 				continue;
-			}
+			}//if
 			
 
 			if(!(genTran.getSequence().length() - ppTran.getSequence().length() == 1 &&  ppTran.getVariants() == genTran.getVariants())){
 //				continue;
-			}
+			}//if
 			
 			if(ppTran.getVariants() == 0){
 //				continue;
-			}
+			}//if
 			
 			
 			//pp longer
@@ -464,13 +469,14 @@ public class ProteomeComparison {
 				ppLonger++;
 			}else if(genTran.getSequence().length() > ppTran.getSequence().length()){
 				gencodeLonger++;
-			}
+			}//if
+			
 			//gencode Longer
 			//Keep track of how many matched translations had a variance
 			misMatch++;
 			if(ppTran.getSequence().length() != genTran.getSequence().length()){
 				misMatchLength++;
-			}
+			}//if
 			if(ppTran.getVariants() != genTran.getVariants()){
 				hasVariance++;
 				variants.add(ppTran.getVariants());
@@ -478,8 +484,8 @@ public class ProteomeComparison {
 				if(((double)ppTran.getVariants())/ppTran.getSequence().length() > maxPercent){
 					maxGene = ppTran.getGeneID();
 					maxPercent = ((double)ppTran.getVariants())/ppTran.getSequence().length();
-				}
-			}
+				}//if
+			}//if
 			
 			int linesOfProtein = ppTran.getSequence().length() / lineLength;
 			proteinsToWriteOut.append(">" + PPname + "|" + ppTran.getTranscriptID() + "|" + ppTran.getGeneID() + "|" + "VariantCount: " + ppTran.getVariants() + "|" + "Length: " + ppTran.getSequence().length() + "|" + "\n");
@@ -494,7 +500,7 @@ public class ProteomeComparison {
 				//Write 80 characters
 					proteinsToWriteOut.append(ppTran.getSequence().substring(k*lineLength, (k+1)*lineLength));
 					proteinsToWriteOut.append("\n");
-				}
+				}//if
 				
 			}//for
 
@@ -513,7 +519,7 @@ public class ProteomeComparison {
 				//Write 80 characters
 					proteinsToWriteOut.append(genTran.getSequence().substring(k*lineLength, (k+1)*lineLength));
 					proteinsToWriteOut.append("\n");
-				}
+				}//else
 				
 			}//for
 			
@@ -532,8 +538,9 @@ public class ProteomeComparison {
 			outFile.mkdir();
 			String outputDir = outFile.getAbsolutePath() + "/";
 			
-			BufferedWriter gencodeUNMATCHED	 = new BufferedWriter(new FileWriter(outputDir + "gencodeUNMATCHED"+ outputFileName));;
-			BufferedWriter ppUnmatched = new BufferedWriter(new FileWriter(outputDir + "ppUNMATCHED"+ outputFileName));
+			BufferedWriter gencodeUNMATCHED	 = new BufferedWriter(new FileWriter(outputDir + "gencodeUNMATCHED"+ outputFileName));
+			//Code is unimplemented
+//			BufferedWriter ppUnmatched = new BufferedWriter(new FileWriter(outputDir + "ppUNMATCHED"+ outputFileName));
 			BufferedWriter proteinOutput= new BufferedWriter(new FileWriter(outputDir + "MATCHEDbutVariant"+ outputFileName));
 			proteinOutput.append(proteinsToWriteOut.toString());
 			
@@ -544,12 +551,11 @@ public class ProteomeComparison {
 		
 				U.p("CODE FOR pp unmatched proteins is not written!*************************");
 				
-				
-			}
+			}//if
 			
 			if(gencodeNotMatchedCount > 0){
 				gencodeUNMATCHED.append(unMatchedGencode.toString());
-			}
+			}//if
 			
 			BufferedWriter statsOut= new BufferedWriter(new FileWriter(outputDir + "STATS" + outputFileName));
 			statsOut.write("This run was started at " + startTime + "\n");
@@ -590,8 +596,8 @@ public class ProteomeComparison {
 				totalVariantValue += inte;
 				if(inte > maxVariant){
 					maxVariant = inte;
-				}
-			}
+				}//if
+			}//for
 			if(variants.size() > 0){
 			statsOut.write("The median value of the number of variants in a translation with at least 1 variant is: " + variants.get(variants.size() / 2) + "\n");
 			
@@ -599,7 +605,7 @@ public class ProteomeComparison {
 			statsOut.write("The maximum number of variants a single translation has is: " + maxVariant + "\n");
 			}else{
 				statsOut.write("There are 0 varaints between GENCODE and PP.");
-			}
+			}//else
 			statsOut.newLine();
 			Collections.sort(variantAsPercentageOfLength);		
 			double percentTotal = 0;
@@ -607,21 +613,20 @@ public class ProteomeComparison {
 				percentTotal += d;
 				if(d > maxPercent){
 					maxPercent = d;
-				}
-			}
+				}//if
+			}//for
 			if(variantAsPercentageOfLength.size() > 0){
 			statsOut.write("The median value of the percent of variants as compared to length (#variants/length) is: " + variantAsPercentageOfLength.get(variantAsPercentageOfLength.size() / 2)*100 + "%" + "\n");
 			statsOut.write("The average value of the percent of variants as compared to length (#variants/length) is: " + (percentTotal/variantAsPercentageOfLength.size())*100 + "%" + "\n");
 			statsOut.write("The maximum value of the percentage of variants as compared to length (#variants/length) is: " + (maxPercent*100) + "%" + "\n");
 			statsOut.write("The gene with the maximum value is: " + maxGene + "\n");
-			}
+			}//if
 			statsOut.write("********STATS**********" + "\n");
 			
 			if(gencodeNotMatchedCount > 0){
 				gencodeUNMATCHED.flush();
 				gencodeUNMATCHED.close();
-				
-			}
+			}//if
 			
 			
 			proteinOutput.flush();
@@ -631,11 +636,8 @@ public class ProteomeComparison {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}//catch
 
-		
-		
-		
 	}//compareAndCreateOutput
 	
 }//class

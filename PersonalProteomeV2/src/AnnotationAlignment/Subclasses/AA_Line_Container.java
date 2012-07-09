@@ -2,7 +2,6 @@ package AnnotationAlignment.Subclasses;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.Callable;
 
 
 /**
@@ -15,36 +14,42 @@ import java.util.concurrent.Callable;
 public class AA_Line_Container implements Comparable<AA_Line_Container>{
 
 	//The GTFLine to store inside of this AA
-	GTF_Line gtfLine;
+	private GTF_Line gtfLine;
 	
 	//The reference string for this containers stop and start locations
-	String refStartStrand;
-	String refStopStrand;
+	private String refStartStrand;
+	private String refStopStrand;
 	
 	//The array of start/stop locations for this object.  These arrays store the locations of the top matches for this object.
-	ArrayList<Integer> newStarts = new ArrayList<Integer>();
-	ArrayList<Integer> newStops = new ArrayList<Integer>();
+	private ArrayList<Integer> newStarts = new ArrayList<Integer>();
+	private ArrayList<Integer> newStops = new ArrayList<Integer>();
+	
+	//Chromosome this occurs in
+	private int chromosome;
 	
 	
 	/**
 	 * The gtfLine is the minimum amount of information to create a AA_Line_Container.  It needs a refStartStrand/refStopStrand and a newStarts/newStops arrays also.
 	 * @param gtfLine
+	 * @param chromosome
 	 */
-	public AA_Line_Container(GTF_Line gtfLine) {
+	public AA_Line_Container(GTF_Line gtfLine, int chromosome) {
 		this.gtfLine = gtfLine;
+		this.chromosome = chromosome;
 	}
 	
 	/**
-	 * 
-	 * @return Returns a series of annotation lines with the new start/stop locations added.  For every possible start/stop location in the 
+	 * toString has the ability to but the code is commented out: Returns a series of annotation lines with the new start/stop locations added.  For every possible start/stop location in the 
 	 * newStarts/newStops arrays, a GTF line is returned.  The best guess is returned normally, and all secondary guesses are returned as commented out lines.
 	 * 
+	 * 
+	 * @return A updated version of the original GTF line.  It is updated with the new predicted locations.  
 	 */
 	public String toString(){
 		String line = gtfLine.toString();
 		StringBuffer output = new StringBuffer();
 		
-		//This code outputs every guess, versus just the top guess.  It comments out everyguess but the top guess with ##
+		//This code outputs every guess, versus just the top guess.  It comments out every guess but the top guess with ##
 //		//Loop through the starts
 //		for(int i = 0; i < newStarts.size(); i++){
 //			//Loops thorugh the stops
@@ -97,7 +102,7 @@ public class AA_Line_Container implements Comparable<AA_Line_Container>{
 			
 		//Return the output
 		return output.toString();
-	}
+	}//toString
 	
 	/**
 	 * @return the gtfLine
@@ -171,6 +176,14 @@ public class AA_Line_Container implements Comparable<AA_Line_Container>{
 	 * This method is for sorting these objects after a multithreaded task messing up a collection of these objects.
 	 */
 	public int compareTo(AA_Line_Container arg0) {
+		
+		if(this.chromosome < arg0.chromosome){
+			return -1;
+		}
+		
+		if(this.chromosome > arg0.chromosome){
+			return 1;
+		}
 		// TODO Auto-generated method stub
 		return 0;
 	}

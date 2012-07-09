@@ -128,6 +128,11 @@ public class Definitions {
 		return out;
 	}//convertStrandToString
 	
+	
+	/**
+	 * @param status A definitions file defined status. eg. transcript status or gene status
+	 * @return A string representing one of the four status: KNOWN, NULL, NOVEL, UNKNOWN
+	 */
 	public static String convertStatusToString(int status){
 		String out = "?";
 		switch(status){
@@ -142,7 +147,10 @@ public class Definitions {
 		return out;
 	}//convertStatusToString
 	
-	
+	/**
+	 * @param loctType A definitions file defined Location type.
+	 * @return ONe of the 5 locations types: UKNOWN, INTERGENIC, TRANSCRIPT, INTRON, EXON
+	 */
 	public static String getLocType(int loctType){
 		String out = "?";
 		
@@ -155,7 +163,7 @@ public class Definitions {
 		}
 		
 		return out;
-	}
+	}//getLocType
 
 	
-}
+}//Definitions

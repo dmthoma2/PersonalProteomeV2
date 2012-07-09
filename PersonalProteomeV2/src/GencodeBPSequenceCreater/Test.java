@@ -2,6 +2,15 @@ package GencodeBPSequenceCreater;
 
 import PersonalProteome.U;
 
+
+/**
+ * Test is a simple test class for use with confirming GencodeBPSequence.  It takes a input string and outputs it length, as well as a specified substring.
+ * This substring can be used in various online tools to convert it into amino acids.  This amino acid string can be compared with online databases to confirm
+ * that the DNA sequence output by GencodeBPSequence is the correct protein/gene.
+ * 
+ * @author David "Corvette" Thomas
+ *
+ */
 public class Test {
 	
 	public static void main(String[] args){

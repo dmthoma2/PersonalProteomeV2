@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
@@ -21,6 +20,17 @@ import AnnotationAlignment.Subclasses.GTF_Line;
 import PersonalProteome.Definitions;
 import PersonalProteome.U;
 
+
+/**
+ * AAManager takes in parameter information and configures/launches multiple threads to complete a genome wide annotation matching with the Annotation Alignment class.
+ * 
+ * 
+ * **Monday July 9th - Currently is experiencing ridiculous memory requirments.  Should come up with a system to limit memory and/or number of threads.
+ * The code funamentally works but needs to be fine tuned for real world usage.**x
+ * 
+ * @author David "Corvette" Thomas
+ *
+ */
 public class AAManager {
 
 	private int NTHREDS;
@@ -45,7 +55,15 @@ public class AAManager {
 	
 	
 	
-	
+	/**
+	 * AAManager handles the alignment of an annotation to a novel genome from a reference genome.
+	 * @param inputAnnotation  The annotation to be aligned.
+	 * @param outputDirectory The directory to store output.
+	 * @param referenceDNAGenome Reference genome to get reference DNA strands from.
+	 * @param DNAGenome Genome to align the Annotation to.
+	 * @param proteinOnly  special boolean tag that determines to selectively filter only genes/transcripts that are involved in protein coding.  If true
+	 * this value only selects those protein genes for alignment, otherwise it aligns all lines of the annotation.
+	 */
 	public AAManager(String inputAnnotation, String outputDirectory, String referenceDNAGenome, String DNAGenome, boolean proteinOnly){
 		this.annotationFile = inputAnnotation;
 		this.outputDirectory = outputDirectory;
@@ -54,11 +72,10 @@ public class AAManager {
 		this.proteinOnly = proteinOnly;
 		
 		//Populate chromsome ArrayList
-		refGenomeFiles = populateChrmArrayList(referenceDNAGenome);
-	    genomeFiles = populateChrmArrayList(DNAGenome);
+		refGenomeFiles = populateChrmArrayList(this.referenceDNAGenome);
+	    genomeFiles = populateChrmArrayList(this.DNAGenome);
 		
 		//Create enough threads to have one for each chromosome
-//		NTHREDS = genomeFiles.size();
 	    if(Runtime.getRuntime().availableProcessors() < genomeFiles.size()){
 	    	NTHREDS = Runtime.getRuntime().availableProcessors();
 	    }else{
@@ -196,12 +213,12 @@ public class AAManager {
 					
 					
 
-				}
+				}//if A chromosome is done
 				
 				//Determine if all lines are to be modified, or just lines used in protein creation are used(These are the only lines Personal Proteome uses).  
 				if(uploadAll){
 					
-					GTFlist.add(new AA_Line_Container(line));
+					GTFlist.add(new AA_Line_Container(line, chromosomeName));
 					id++;
 					
 				}else{
@@ -210,7 +227,7 @@ public class AAManager {
 					/*Add the line object to the list of parsed lines*/
 					if(end.contains("protein_coding") || end.contains("nonsense_mediated_decay")){
 						/*Finished with variables, now create a GENCODE_GTF_Line object and insert it into the ArrayList*/
-						GTFlist.add(new AA_Line_Container(line));
+						GTFlist.add(new AA_Line_Container(line, chromosomeName));
 						id++;
 						
 					}//if
@@ -276,7 +293,9 @@ public class AAManager {
 //		for(int k = 0; k < outputList.size(); k++){
 
 		out.addAll(outputList);
+		
 //		}//for
+		
 		//After all threads are done sort the output
 		Collections.sort(out);
 		//Remember if this method has been run before
@@ -287,6 +306,8 @@ public class AAManager {
 	
 	
 	/**
+	 * createOutput takes in the results from the annotation alignment and simply outputs them to the output directory, with the file name of the 
+	 * results file taken from the name of the input genome.
 	 * 
 	 */
 	public void createOutput(ArrayList<AA_Line_Container> GTFlist){

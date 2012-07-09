@@ -2,6 +2,12 @@ package PersonalProteome.BEDGeneIdentifier.SubClasses;
 
 import PersonalProteome.Definitions;
 
+
+/**
+ * BedFile Line is a class that stores information on a single bed file line.
+ * @author David "Corvette" Thomas
+ *
+ */
 public class BedFileLine implements Comparable<BedFileLine>{
 
 	
@@ -20,6 +26,7 @@ public class BedFileLine implements Comparable<BedFileLine>{
 	
 
 	String dnaSeq = "";
+	
 	/**
 	 * @param id
 	 * @param chromosomeName
@@ -67,14 +74,12 @@ public class BedFileLine implements Comparable<BedFileLine>{
 				+ sequence + "\t"
 				+ score + "\t"
 				+ strand + "\t"
-//				+ startLocation + "\t"
-//				+ stopLocation + "\t"
 				+ color + "\t"
 				+ blockCount + "\t"
 			    + blockSize + "\t"
 				+ blockStart + "\t"
 				+ restOfLine + "\t";
-	}
+	}//toString
 
 
 	/**
@@ -189,8 +194,8 @@ public class BedFileLine implements Comparable<BedFileLine>{
 			return 1;
 		}
 		return 0;
-	}
+	}//compareTo
 
 
 	
-}
+}//BedFileLine

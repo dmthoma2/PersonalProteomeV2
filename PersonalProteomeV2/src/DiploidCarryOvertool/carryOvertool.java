@@ -18,6 +18,10 @@ import PersonalProteome.U;
 /**
  * carryOvertool takes in a genome and reference genome and uses a chain file to convert the coordinates of the genome to the reference genome.  It outputs the new
  * modified genome as well as a VCF file containing the changes.
+ * 
+ **** This is not a robust release ready software, but was designed as a in house tool to limited usage.  It is the first of several steps to create a HG19 based version
+ *of a modified non-HG19 (eg. HG18) based genome.****
+ * 
  * @author David "Corvette" Thomas
  *
  */
@@ -69,8 +73,6 @@ public class carryOvertool {
 		populateRefChrmArrayList(refGenomeDir);
 		populateChrmArrayList(genomeDir, genomeFileSuffix);
 		
-		
-//		vcf = new VCFFile();
 		bedOut = new StringBuffer();
 		
 		outputDirectory = new File(outputDir + "/Modified" + genomeFileSuffix.substring(0, genomeFileSuffix.lastIndexOf('.')) + "/");

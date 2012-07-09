@@ -50,17 +50,17 @@ public class BGIDriver {
 		
 		/* i'm finished! */
 		printFarewell();
-	}
+	}//main
 		
 	public static void printGreeting() {		
 		U.p("Peptide Analysis at the speed of a turbo-Vette!");
 		U.p("max available memory: " + (double) memoryUsage.getMax() / (1024 * 1024 * 1024) + " gigabytes");
-	}
+	}//printGreeting
 	
 	public static void printFarewell() {
 		U.p("Until next time, signing off...");
-	}
-}
+	}//pritnFarewell
+}//BGIDriver
 
 
 

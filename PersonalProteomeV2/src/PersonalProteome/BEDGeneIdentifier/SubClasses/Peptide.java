@@ -129,4 +129,4 @@ public class Peptide {
 		}
 		
 	}//determineIfOnSplit
-}
+}//Peptide

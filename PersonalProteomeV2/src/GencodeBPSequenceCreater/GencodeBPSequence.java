@@ -82,6 +82,8 @@ public class GencodeBPSequence {
 		U.p("Starting up on: " + sdf.format(Calendar.getInstance().getTime()));
 		U.p("Creating a .fasta file with genes and genetic sequences.");
 		
+		
+		/*Debuging values to override the input*/
 //		args = new String[3];
 		
 		/*Various sample inputs used during debugging*/
