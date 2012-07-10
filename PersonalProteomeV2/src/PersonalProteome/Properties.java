@@ -20,14 +20,14 @@ public class Properties {
 
 	
 	//Null private constructor so this class can't be instantiated
-	private BGIProperties(){
+	private Properties(){
 	}
 	
 	//File/Directory Locations
 	public static String annotationFile = "No annotation file set!";
 	public static String refGenomeDir = "No reference gonome directory set!";
 	public static String genomeDir = "No gonome directory set!";
-	public static String outputDir = "No output directory set!";
+	public static String outputDir = "output/";
 	public static String regionsOfInterestFile = "noregions";
 	public static String outputFileName = "Genome.txt";
 	public static String statsOutputFile = "Statistics.txt";

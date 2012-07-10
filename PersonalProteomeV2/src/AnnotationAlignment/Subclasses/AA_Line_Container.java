@@ -33,6 +33,15 @@ public class AA_Line_Container implements Comparable<AA_Line_Container>{
 	 * @param gtfLine
 	 * @param chromosome
 	 */
+	public AA_Line_Container(GTF_Line gtfLine) {
+		this.gtfLine = gtfLine;
+	}
+	
+	/**
+	 * The gtfLine is the minimum amount of information to create a AA_Line_Container.  It needs a refStartStrand/refStopStrand and a newStarts/newStops arrays also.
+	 * @param gtfLine
+	 * @param chromosome
+	 */
 	public AA_Line_Container(GTF_Line gtfLine, int chromosome) {
 		this.gtfLine = gtfLine;
 		this.chromosome = chromosome;

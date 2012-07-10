@@ -868,8 +868,11 @@ public class Annotation{
 				variantAmpData = new ArrayList<DataPoint>();
 				variantData = new ArrayList<VariantPoint>();
 				outFile = new File(proteinFASTAOUTPUTDIR + "/" + outputDirectoryFormat.format(cal.getTime()) +  "/");
-				outFile.mkdir();
+				outFile.mkdirs();
 				String outputDir = outFile.getAbsolutePath() + "/";
+				if(Properties.debug == true){
+					U.p("Output in folder: " + outputDir);
+				}
 				out = new BufferedWriter(new FileWriter(outputDir + outputFileName));
 
 				sb = new StringBuffer();
@@ -1168,11 +1171,16 @@ public class Annotation{
 					if(modStopStart){
 						 sb.append("StartEx: " + startExtensionLength + "|" + "EndEx: " + endExtensionLength + "|");
 					}
+					
+					sb.append("HasPrematureStop: " + t.doesContainPreMatureStop() + "|" + "PrematureStopLength: " + t.getPreMatureStopCount() + "|");
+					sb.append(GTFlist.get(t.getiD()).getTranscriptID() + "|" + GTFlist.get(t.getiD()).getGeneID() + "|");
 					sb.append("\n");
-					sb.append("> " + "HasPrematureStop: " + t.doesContainPreMatureStop() + "|" + "PrematureStopLength: " + t.getPreMatureStopCount() + "|");
-					sb.append("\n");
-					sb.append("> " + GTFlist.get(t.getiD()).getTranscriptID() + "|" + GTFlist.get(t.getiD()).getGeneID() + "|");
-					sb.append("\n");
+					//Code for multiple lines
+//					sb.append("\n");
+//					sb.append("> " + "HasPrematureStop: " + t.doesContainPreMatureStop() + "|" + "PrematureStopLength: " + t.getPreMatureStopCount() + "|");
+//					sb.append("\n");
+//					sb.append("> " + GTFlist.get(t.getiD()).getTranscriptID() + "|" + GTFlist.get(t.getiD()).getGeneID() + "|");
+//					sb.append("\n");
 					//Write this transcript to the file.
 					for(int k = 0; k < linesOfProtein + 1; k++){
 						//If it is the last line, just write all of them
@@ -1719,11 +1727,18 @@ public class Annotation{
 		BufferedWriter out;
 		
 		try {
-			U.p(this.chrmDir);
 			String temp = this.chrmDir.substring(0, this.chrmDir.length() - 1);
 			int tempIndex = temp.lastIndexOf('/');
 			temp = temp.substring(tempIndex + 1);
-			out = new BufferedWriter(new FileWriter(this.proteinFASTAOUTPUTDIR + temp + ".fasta"));
+			File outputFile = new File(this.proteinFASTAOUTPUTDIR + "/");
+			outputFile.mkdirs();
+			if(Properties.debug == true){
+				U.p("Output in folder: " + outputFile.getAbsolutePath());
+			}
+			
+			out = new BufferedWriter(new FileWriter(outputFile.getAbsolutePath() + "/" +  temp + ".fasta"));
+			
+			
 			
 			
 //			out.write("##Total number of proteins: " + transcriptList.size() + "\n");
