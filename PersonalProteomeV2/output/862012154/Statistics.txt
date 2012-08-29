@@ -1,0 +1,58 @@
+Start time: 08-06-2012 15:04:36
+End time:   08-06-2012 15:09:27
+
+File Information
+Annotation file:     /Users/davidthomas/Peppy/ProteomeV2/annotation/gencode.v11.annotation.gtf
+Reference Genome:    /Users/davidthomas/Peppy/ProteomeV2/chromosome/hg19/
+Genome Directory:    /Users/davidthomas/Peppy/ProteomeV2/chromosome/WHIM2_GERMLINE/
+Regions of interest: noregions
+Prefiltering Option: Off
+Start/Stop Modification: Off
+
+*******************   STATS   ***********************
+Totals Information
+Annotation lines associated with protein coding: 2157400.
+Total number of proteins created:     91552 out of 91552.
+Regions of interest count:            0.
+
+
+Output file error information
+Output errors total:          4503
+X or M not found at start:    4236
+Stop codon inside of protein: 267
+
+
+Premature stop totals
+Reference genome: 1
+Input genome:    267
+
+
+Regions of Interest
+Reference genome non zero score total: 0
+Input genome non zero score total:     0
+
+
+Selenocysteine
+Reference Genome****
+Locations:           41
+Total found:         103
+Proteins containing: 65
+Genome**************
+Locations:            41
+Total found:          103
+Proteins containing: 65
+
+NOTE: While computing these statistics, if a error occurred on more then one protein but stemmed from the same location in the DNA, it is only counted the first time.
+
+
+Variances in the input genome are changed to lower case.
+Variant protein total:               21449
+Variations total:                    35637
+Proteins with 1 variance total:      14464
+Max variations in a single protein:  79
+Average # of variants in proteins with a variant: 1.661476059489953
+Average # of variants in proteins with more then 1 variant: 3.031209735146743
+Percent of proteins with a variance: 23.428215658860537%
+
+
+*******************   STATS   ***********************
