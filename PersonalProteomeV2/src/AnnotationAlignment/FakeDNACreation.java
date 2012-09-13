@@ -27,14 +27,14 @@ public class FakeDNACreation {
 		// TODO Auto-generated method stub
 		U.p("Generating Fake DNA");
 		
-		args = new String[5];
+		args = new String[6];
 		//Output Location
-		args[0] = "/Users/davidthomas/Peppy/ProteomeV2/fakeDNA/output/";
+		args[0] = "/Users/davidthomas/Peppy/PeppyData/SimpleRandomDNA/";
 		//Created DNA Size/Input DNA
-//		args[1] = "1000";
+		args[1] = "10000000";
 //		args[1] = "/Users/davidthomas/Peppy/ProteomeV2/fakeDNA/input/chr1.fa";
 //		args[1] = "/Users/davidthomas/Peppy/ProteomeV2/fakeDNA/input/chrM.fa";
-		args[1] = "/Users/davidthomas/Peppy/ProteomeV2/fakeDNA/input/chr21.fa";
+//		args[1] = "/Users/davidthomas/Peppy/ProteomeV2/fakeDNA/input/chr21.fa";
 		//Percent Mutate
 		args[2] = "5";
 		//Amplify
@@ -47,12 +47,12 @@ public class FakeDNACreation {
 		
 		
 		//Modify Existing DNA
-		U.p("Generating a DNA from" + args[1] + " with the mutation rate of " + args[2] + "% and the use of amplification is: " + args[3] + ".  The preservation of coordinates is: " + args[4]);
-		FakeDNACreation fdc = new FakeDNACreation(args[0], args[1], Double.valueOf(args[2]), args[3], args[4]);
+//		U.p("Generating a DNA from" + args[1] + " with the mutation rate of " + args[2] + "% and the use of amplification is: " + args[3] + ".  The preservation of coordinates is: " + args[4]);
+//		FakeDNACreation fdc = new FakeDNACreation(args[0], args[1], Double.valueOf(args[2]), args[3], args[4]);
 		//Random DNA
-//		U.p("Generating a DNA sequence of length " + args[1] + " with the mutation rate of " + args[2] + "% and the use of amplification is: " + args[3] + ".  The preservation of coordinates is: " + args[4]);
-//		FakeDNACreation fdcNewRand = new FakeDNACreation(args[0], Integer.valueOf(args[1]), Double.valueOf(args[2]), args[3], args[4]);
-//		fdc.createOutput();
+		U.p("Generating a DNA sequence of length " + args[1] + " with the mutation rate of " + args[2] + "% and the use of amplification is: " + args[3] + ".  The preservation of coordinates is: " + args[4]);
+		FakeDNACreation fdc = new FakeDNACreation(args[0], Integer.valueOf(args[1]), Double.valueOf(args[2]), args[3], args[4]);
+		fdc.createOutput();
 		
 		U.p("Done");
 		
